@@ -16,13 +16,12 @@ v1_api.register(ReaderLocationResource())
 v1_api.register(ScanResource())
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'cards.views.home', name='home'),
-    # url(r'^blog/', include('blog.urls')),
-
     url(r'^admin/', include(admin.site.urls)),
+    
 
     (r'^api/', include(v1_api.urls)),
     url(r'api/doc/', include('tastypie_swagger.urls', namespace='tastypie_swagger')),
+
+    url(r'^api/cards/collector/', 'cards.api.collector.collect_scan'),
 
 )

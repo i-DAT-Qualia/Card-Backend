@@ -12,7 +12,7 @@ class Batch(models.Model):
 
 
 class Card(models.Model):
-    code = models.CharField(max_length=25)
+    code = models.CharField(max_length=14, unique=True)
     is_child = models.BooleanField(default=False)
     batch = models.ForeignKey(Batch, blank=True, null=True)
     added = models.DateTimeField(auto_now_add=True)
@@ -55,7 +55,7 @@ class ReaderLocation(models.Model):
 class Scan(models.Model):
     card = models.ForeignKey(Card)
     readerLocation = models.ForeignKey(ReaderLocation)
-    added = models.DateTimeField(auto_now_add=True)
+    added = models.DateTimeField()
 
     def __unicode__(self):
         return self.card.code + " scanned at " + self.readerLocation.location.name
