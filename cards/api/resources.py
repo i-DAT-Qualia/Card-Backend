@@ -23,7 +23,12 @@ class KeyOnlyAuthentication(Authentication):
         from tastypie.models import ApiKey
 
         try:
-            key = ApiKey.objects.get(key=request.GET.get('api_key') or request.POST.get('api_key'))
+            if request.GET:
+                api_key = request.GET.get('api_key')    
+            elif request.POST:
+                api_key = request.POST.get('api_key')
+            print api_key
+            key = ApiKey.objects.get(key=api_key)
             request.user = key.user
         except ApiKey.DoesNotExist:
             return self._unauthorized()
@@ -35,6 +40,7 @@ class BatchResource(ModelResource):
     class Meta:
         queryset = Batch.objects.all()
         authentication = KeyOnlyAuthentication()
+        authorization = DjangoAuthorization()
         resource_name = 'batch'
         allowed_methods = ['get','post','put','patch']
         always_return_data = True
@@ -47,6 +53,7 @@ class CardResource(ModelResource):
     class Meta:
         queryset = Card.objects.all()
         authentication = KeyOnlyAuthentication()
+        authorization = DjangoAuthorization()
         resource_name = 'card'
         allowed_methods = ['get','post','put','patch']
         always_return_data = True
@@ -59,6 +66,7 @@ class ReaderResource(ModelResource):
     class Meta:
         queryset = Reader.objects.all()
         authentication = KeyOnlyAuthentication()
+        authorization = DjangoAuthorization()
         resource_name = 'reader'
         allowed_methods = ['get','post','put','patch']
         always_return_data = True
@@ -68,6 +76,7 @@ class LocationResource(ModelResource):
     class Meta:
         queryset = Location.objects.all()
         authentication = KeyOnlyAuthentication()
+        authorization = DjangoAuthorization()
         resource_name = 'location'
         allowed_methods = ['get','post','put','patch']
         always_return_data = True
@@ -80,6 +89,7 @@ class ReaderLocationResource(ModelResource):
     class Meta:
         queryset = ReaderLocation.objects.all()
         authentication = KeyOnlyAuthentication()
+        authorization = DjangoAuthorization()
         resource_name = 'readerlocation'
         allowed_methods = ['get','post','put','patch']
         always_return_data = True
@@ -92,6 +102,7 @@ class ScanResource(ModelResource):
     class Meta:
         queryset = Scan.objects.all()
         authentication = KeyOnlyAuthentication()
+        authorization = DjangoAuthorization()
         resource_name = 'scan'
         allowed_methods = ['get','post','put','patch']
         always_return_data = True
