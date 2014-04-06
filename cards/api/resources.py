@@ -36,7 +36,7 @@ class BatchResource(ModelResource):
         queryset = Batch.objects.all()
         authentication = KeyOnlyAuthentication()
         resource_name = 'batch'
-        allowed_methods = ['get']
+        allowed_methods = ['get','post','put','patch']
         always_return_data = True
 
 
