@@ -23,7 +23,7 @@ class KeyOnlyAuthentication(Authentication):
         from tastypie.models import ApiKey
 
         try:
-            key = ApiKey.objects.get(key=request.GET.get('api_key'))
+            key = ApiKey.objects.get(key=request.GET.get('api_key') or request.POST.get('api_key'))
             request.user = key.user
         except ApiKey.DoesNotExist:
             return self._unauthorized()
