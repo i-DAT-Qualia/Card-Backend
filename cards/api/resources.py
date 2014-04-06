@@ -48,7 +48,7 @@ class CardResource(ModelResource):
         queryset = Card.objects.all()
         authentication = KeyOnlyAuthentication()
         resource_name = 'card'
-        allowed_methods = ['get']
+        allowed_methods = ['get','post','put','patch']
         always_return_data = True
         filtering = {
             'code': ALL
@@ -60,7 +60,7 @@ class ReaderResource(ModelResource):
         queryset = Reader.objects.all()
         authentication = KeyOnlyAuthentication()
         resource_name = 'reader'
-        allowed_methods = ['get']
+        allowed_methods = ['get','post','put','patch']
         always_return_data = True
 
 
@@ -69,7 +69,7 @@ class LocationResource(ModelResource):
         queryset = Location.objects.all()
         authentication = KeyOnlyAuthentication()
         resource_name = 'location'
-        allowed_methods = ['get']
+        allowed_methods = ['get','post','put','patch']
         always_return_data = True
 
 
@@ -81,7 +81,7 @@ class ReaderLocationResource(ModelResource):
         queryset = ReaderLocation.objects.all()
         authentication = KeyOnlyAuthentication()
         resource_name = 'readerlocation'
-        allowed_methods = ['get']
+        allowed_methods = ['get','post','put','patch']
         always_return_data = True
 
 
@@ -93,5 +93,5 @@ class ScanResource(ModelResource):
         queryset = Scan.objects.all()
         authentication = KeyOnlyAuthentication()
         resource_name = 'scan'
-        allowed_methods = ['get']
+        allowed_methods = ['get','post','put','patch']
         always_return_data = True
