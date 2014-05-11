@@ -47,6 +47,8 @@ class ReaderLocation(models.Model):
     location = models.ForeignKey(Location)
     added = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    start = models.DateField(blank=True, null=True)
+    end = models.DateField(blank=True, null=True)
 
     def __unicode__(self):
         return self.reader.name + " is at " + self.location.name
