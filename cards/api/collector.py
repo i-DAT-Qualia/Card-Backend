@@ -10,9 +10,10 @@ from datetime import datetime
 
 from tastypie.models import ApiKey
 
+from django.core.exceptions import ObjectDoesNotExist
+
 import json
 
-#custom method for collecting gps data
 @csrf_exempt
 def collect_scan(request):
     success = False
@@ -26,19 +27,29 @@ def collect_scan(request):
             if request.method == "POST":
                 data = json.loads(request.body)
 
+                the_scan = Scan()
+
                 the_card, created = Card.objects.get_or_create(
                     code=data['code']
                 )
 
-                the_readerLocation = ReaderLocation.objects.filter(
-                    reader__id=data['reader']
-                ).latest('updated')
-                
-
-                the_scan = Scan()
                 the_scan.card = the_card
-                the_scan.readerLocation = the_readerLocation
+
                 the_scan.added = datetime.strptime(data['datetime'], '%d%m%Y%H%M%S')
+
+                try:
+                    the_readerLocation = ReaderLocation.objects.filter(
+                        reader__id=data['reader'],
+                    #).latest('updated')
+                    ).get(start__lte=the_scan.added, end__gte=the_scan.added)
+
+                except ObjectDoesNotExist:
+                    #if a card is scaned between opening dates, default to the old behavour.
+                    the_readerLocation = ReaderLocation.objects.filter(
+                        reader__id=data['reader'],
+                    ).latest('updated')
+
+                the_scan.readerLocation = the_readerLocation
 
                 the_scan.save()
 
