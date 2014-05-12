@@ -1,0 +1,18 @@
+<html>
+<head>
+    <title>iOrchestra Scan Uploader</title>
+</head>
+<body>
+    <h1>iOrchestra Scan Uploader</h1>
+
+    {% if not success %}
+    <p>Use this page to upload scans.json files to the backend. Files are automatically processed</p>
+    {% else %}
+    <h2>Scans Uploaded!</h2>
+    {% endif %}
+    <form enctype="multipart/form-data" action="/upload/?api_key={{key}}" method="post">{% csrf_token %}
+        {{form}}
+        <input type="submit" value="Submit" />
+    </form>
+</body>
+</html>
