@@ -35,16 +35,24 @@ def collect_scan(request):
 
                 the_scan.card = the_card
 
-                the_scan.added = datetime.strptime(data['datetime'], '%d%m%Y%H%M%S')
+                added = datetime.strptime(data['datetime'], '%d%m%Y%H%M%S')
 
-                try:
-                    the_readerLocation = ReaderLocation.objects.filter(
-                        reader__id=data['reader'],
-                    #).latest('updated')
-                    ).get(start__lte=the_scan.added, end__gte=the_scan.added)
+                if not added.year == 2001:
+                    the_scan.added = added 
 
-                except ObjectDoesNotExist:
-                    #if a card is scaned between opening dates, default to the old behavour.
+                    try:
+                        the_readerLocation = ReaderLocation.objects.filter(
+                            reader__id=data['reader'],
+                        #).latest('updated')
+                        ).get(start__lte=the_scan.added, end__gte=the_scan.added)
+
+                    except ObjectDoesNotExist:
+                        #if a card is scaned between opening dates, default to the old behavour.
+                        the_readerLocation = ReaderLocation.objects.filter(
+                            reader__id=data['reader'],
+                        ).latest('updated')
+
+                else: 
                     the_readerLocation = ReaderLocation.objects.filter(
                         reader__id=data['reader'],
                     ).latest('updated')
