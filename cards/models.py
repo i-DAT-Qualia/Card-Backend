@@ -57,7 +57,7 @@ class ReaderLocation(models.Model):
 class Scan(models.Model):
     card = models.ForeignKey(Card)
     readerLocation = models.ForeignKey(ReaderLocation)
-    added = models.DateTimeField()
+    added = models.DateTimeField(blank=True, null=True)
 
     def __unicode__(self):
         return self.card.code + " scanned at " + self.readerLocation.location.name
