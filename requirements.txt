@@ -10,3 +10,4 @@ python-dateutil==2.2
 python-mimeparse==0.1.4
 six==1.6.1
 wsgiref==0.1.2
+xlwt==0.7.5
