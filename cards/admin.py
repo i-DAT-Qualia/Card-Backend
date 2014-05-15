@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from models import *
-from core.actions import export_as_xls
+from cards.actions import export_as_xls
 
 class ScanAdmin(admin.ModelAdmin):
     list_filter = ['readerLocation', 'added']
