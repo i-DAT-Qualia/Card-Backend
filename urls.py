@@ -18,6 +18,7 @@ v1_api.register(ScanResource())
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     
+    url(r'^api/v1/location/(?P<id>\d+)/totals/', 'cards.api.return_data.return_loc_totals'),
 
     (r'^api/', include(v1_api.urls)),
     url(r'api/doc/', include('tastypie_swagger.urls', namespace='tastypie_swagger')),
