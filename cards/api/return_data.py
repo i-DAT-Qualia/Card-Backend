@@ -24,12 +24,25 @@ def return_loc_totals(request, id):
         adults = scans.filter(card__is_child=False)
         children = scans.filter(card__is_child=True)
 
-        unique_adults = scans.distinct('card')
-        unique_children = scans.distinct('card')
+        unique_adults = []
 
-        data['unique_adult'] = unique_adults.count()
+        for adult in adults:
+            if not adult.card in unique_adults:
+                unique_adults.append(adult.card)
+
+        unique_children = []
+
+        for child in children:
+            if not child.card in unique_children:
+                unique_children.append(child.card)
+            
+        #unique_children = scans.distinct('card')
+
+
+
+        data['unique_adult'] = len(unique_adults)
         data['total_adult'] = adults.count()
-        data['unique_child'] = unique_children.count()
+        data['unique_child'] = len(unique_children)
         data['total_child'] = children.count()
 
     return HttpResponse(json.dumps(data), content_type="application/json")
