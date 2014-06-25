@@ -8,6 +8,8 @@ from cards.models import *
 
 from datetime import datetime
 
+import datetime
+
 from tastypie.models import ApiKey
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -75,3 +77,15 @@ def upload_scans(request):
         {'form': form, 'success':success, 'key':key.key},
         context_instance=RequestContext(request)
     )
+
+
+def scan_weekends(request):
+
+    return render_to_response('dates.html', {
+        '11may': Scan.objects.filter(added=datetime.date(2014, 5, 11)).count(), 
+        '12may': Scan.objects.filter(added=datetime.date(2014, 5, 12)).count(), 
+        '8june': Scan.objects.filter(added=datetime.date(2014, 6, 8)).count(),
+        '9june': Scan.objects.filter(added=datetime.date(2014, 6, 9)).count(),
+        '13july': Scan.objects.filter(added=datetime.date(2014, 7, 13)).count(),
+        '14july': Scan.objects.filter(added=datetime.date(2014, 7, 14)).count()
+    },context_instance=RequestContext(request))

@@ -25,6 +25,8 @@ urlpatterns = patterns('',
 
     url(r'^api/cards/collector/', 'cards.api.collector.collect_scan'),
 
+    url(r'^daystats/', 'cards.views.scan_weekends'),
     url(r'^upload/', 'cards.views.upload_scans'),
+
 
 )

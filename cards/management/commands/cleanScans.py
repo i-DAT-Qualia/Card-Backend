@@ -11,7 +11,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         now = datetime.datetime.now()
         delta = datetime.timedelta(hours=1)
-        start = datetime.datetime(2014, 4, 1)
+        start = datetime.datetime(2014, 5, 1)
 
         for card in Card.objects.all():
             #print card
