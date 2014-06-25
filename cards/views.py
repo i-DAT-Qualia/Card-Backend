@@ -82,10 +82,10 @@ def upload_scans(request):
 def scan_weekends(request):
 
     return render_to_response('dates.html', {
-        '11may': Scan.objects.filter(added=datetime.date(2014, 5, 11)).count(), 
-        '12may': Scan.objects.filter(added=datetime.date(2014, 5, 12)).count(), 
-        '8june': Scan.objects.filter(added=datetime.date(2014, 6, 8)).count(),
-        '9june': Scan.objects.filter(added=datetime.date(2014, 6, 9)).count(),
-        '13july': Scan.objects.filter(added=datetime.date(2014, 7, 13)).count(),
-        '14july': Scan.objects.filter(added=datetime.date(2014, 7, 14)).count()
+        '11may': Scan.objects.filter(added__year='2014', added__month='05', added__day='11').count(), 
+        '12may': Scan.objects.filter(added__year='2014', added__month='05', added__day='12').count(), 
+        '8june': Scan.objects.filter(added__year='2014', added__month='06', added__day='08').count(),
+        '9june': Scan.objects.filter(added__year='2014', added__month='06', added__day='09').count(),
+        '13july': Scan.objects.filter(added__year='2014', added__month='07', added__day='13').count(),
+        '14july': Scan.objects.filter(added__year='2014', added__month='07', added__day='14').count()
     },context_instance=RequestContext(request))
