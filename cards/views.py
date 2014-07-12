@@ -8,7 +8,7 @@ from cards.models import *
 
 from datetime import datetime
 
-import datetime
+#import datetime
 
 from tastypie.models import ApiKey
 
@@ -31,7 +31,7 @@ def handle_scans(scan_file):
 
         
         added = datetime.strptime(scan['datetime'], '%d%m%Y%H%M%S')
-
+        
         if not added.year == 2001:
             the_scan.added = added 
 
@@ -53,7 +53,6 @@ def handle_scans(scan_file):
             ).latest('updated')
 
         the_scan.readerLocation = the_readerLocation
-
         the_scan.save()
 
 def upload_scans(request):
