@@ -16,6 +16,8 @@ from django.core.exceptions import ObjectDoesNotExist
 
 import json
 
+import numpy
+
 
 def handle_scans(scan_file):
     scans = json.load(scan_file)
@@ -88,3 +90,60 @@ def scan_weekends(request):
         '13july': Scan.objects.filter(added__year='2014', added__month='07', added__day='13').count(),
         '14july': Scan.objects.filter(added__year='2014', added__month='07', added__day='14').count()
     },context_instance=RequestContext(request))
+
+
+def averages(request):
+
+    #get batches
+    #batches = Batch.objects.all()
+
+    overall_scan_numbers = []
+    child_scan_numbers = []
+    adult_scan_numbers = []
+
+    overall_max_scan = 0
+    child_max_scan = 0
+    adult_max_scan = 0
+
+    for card in Card.objects.all():
+        scans = Scan.objects.filter(card=card).count()
+        if not scans == 0:
+            overall_scan_numbers.append(scans)
+
+            if scans > overall_max_scan:
+                overall_max_scan = scans
+
+            if card.is_child:
+                child_scan_numbers.append(scans)
+
+                if scans > child_max_scan:
+                    child_max_scan = scans
+
+            else:
+                adult_scan_numbers.append(scans)
+
+                if scans > adult_max_scan:
+                    adult_max_scan = scans
+
+    overall_average = numpy.mean(overall_scan_numbers)
+    child_average = numpy.mean(child_scan_numbers)
+    adult_average = numpy.mean(adult_scan_numbers)
+
+    return render_to_response('averages.html', {
+        'overall_average': overall_average,
+        'child_average': child_average,
+        'adult_average': adult_average,
+        'overall_max_scan': overall_max_scan,
+        'child_max_scan': child_max_scan,
+        'adult_max_scan': adult_max_scan,
+    },context_instance=RequestContext(request))
+
+
+
+
+
+
+
+
+
+
