@@ -106,7 +106,7 @@ def averages(request):
     adult_max_scan = 0
 
     for card in Card.objects.all():
-        scans = Scan.objects.filter(card=card).count()
+        scans = Scan.objects.filter(card=card).exclude(readerLocation__location__id=1).count()
         if not scans == 0:
             overall_scan_numbers.append(scans)
 
