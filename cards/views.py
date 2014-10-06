@@ -94,90 +94,94 @@ def scan_weekends(request):
 
 def averages(request):
 
-    #get batches
-    #batches = Batch.objects.all()
+    if request.GET.get("api_key"):
 
-    overall_scan_numbers = []
-    child_scan_numbers = []
-    adult_scan_numbers = []
+        try:
+            key = ApiKey.objects.get(key=request.GET.get('api_key'))
 
-    overall_max_scan = 0
-    child_max_scan = 0
-    adult_max_scan = 0
+            overall_scan_numbers = []
+            child_scan_numbers = []
+            adult_scan_numbers = []
 
-    for card in Card.objects.all():
-        scans = Scan.objects.filter(card=card).exclude(readerLocation__location__id=1).count()
-        if not scans == 0:
-            overall_scan_numbers.append(scans)
+            overall_max_scan = 0
+            child_max_scan = 0
+            adult_max_scan = 0
 
-            if scans > overall_max_scan:
-                overall_max_scan = scans
+            for card in Card.objects.all():
+                scans = Scan.objects.filter(card=card).exclude(readerLocation__location__id=1).count()
+                if not scans == 0:
+                    overall_scan_numbers.append(scans)
 
-            if card.is_child:
-                child_scan_numbers.append(scans)
+                    if scans > overall_max_scan:
+                        overall_max_scan = scans
 
-                if scans > child_max_scan:
-                    child_max_scan = scans
+                    if card.is_child:
+                        child_scan_numbers.append(scans)
 
-            else:
-                adult_scan_numbers.append(scans)
+                        if scans > child_max_scan:
+                            child_max_scan = scans
 
-                if scans > adult_max_scan:
-                    adult_max_scan = scans
+                    else:
+                        adult_scan_numbers.append(scans)
 
-    overall_average = numpy.mean(overall_scan_numbers)
-    child_average = numpy.mean(child_scan_numbers)
-    adult_average = numpy.mean(adult_scan_numbers)
+                        if scans > adult_max_scan:
+                            adult_max_scan = scans
 
-    batch_detail = []
+            overall_average = numpy.mean(overall_scan_numbers)
+            child_average = numpy.mean(child_scan_numbers)
+            adult_average = numpy.mean(adult_scan_numbers)
 
-    for batch in Batch.objects.all():
-        batch_overall_scan_numbers = []
-        batch_child_scan_numbers = []
-        batch_adult_scan_numbers = []
+            batch_detail = []
 
-        batch_child_total = 0
-        batch_adult_total = 0
+            for batch in Batch.objects.all():
+                batch_overall_scan_numbers = []
+                batch_child_scan_numbers = []
+                batch_adult_scan_numbers = []
 
-        for card in Card.objects.filter(batch=batch):
-            scans = Scan.objects.filter(card=card).exclude(readerLocation__location__id=1).count()
-            if not scans == 0:
-                batch_overall_scan_numbers.append(scans)
+                batch_child_total = 0
+                batch_adult_total = 0
+
+                for card in Card.objects.filter(batch=batch):
+                    scans = Scan.objects.filter(card=card).exclude(readerLocation__location__id=1).count()
+                    if not scans == 0:
+                        batch_overall_scan_numbers.append(scans)
 
 
-                if card.is_child:
-                    batch_child_scan_numbers.append(scans)
-                    batch_child_total += 1
-                else:
-                    batch_adult_scan_numbers.append(scans)
-                    batch_adult_total += 1
+                        if card.is_child:
+                            batch_child_scan_numbers.append(scans)
+                            batch_child_total += 1
+                        else:
+                            batch_adult_scan_numbers.append(scans)
+                            batch_adult_total += 1
 
-        batch_detail.append({
-            'name':batch.name,
-            'overall_average': numpy.mean(batch_overall_scan_numbers),
-            'child_average': numpy.mean(batch_child_scan_numbers),
-            'adult_average': numpy.mean(batch_adult_scan_numbers),
-            'child_total': batch_child_total,
-            'adult_total': batch_adult_total
-        })
+                batch_detail.append({
+                    'name':batch.name,
+                    'overall_average': numpy.mean(batch_overall_scan_numbers),
+                    'child_average': numpy.mean(batch_child_scan_numbers),
+                    'adult_average': numpy.mean(batch_adult_scan_numbers),
+                    'child_total': batch_child_total,
+                    'adult_total': batch_adult_total
+                })
 
+
+            return render_to_response('averages.html', {
+                'overall_average': overall_average,
+                'child_average': child_average,
+                'adult_average': adult_average,
+                'overall_max_scan': overall_max_scan,
+                'child_max_scan': child_max_scan,
+                'adult_max_scan': adult_max_scan,
+                'batches': batch_detail
+            },context_instance=RequestContext(request))
+            
+            
+
+        except ApiKey.DoesNotExist:
+            error = "Error - API Key Does Not Exist"
+        
+    else:
+        error = "Error - No API Key"        
 
     return render_to_response('averages.html', {
-        'overall_average': overall_average,
-        'child_average': child_average,
-        'adult_average': adult_average,
-        'overall_max_scan': overall_max_scan,
-        'child_max_scan': child_max_scan,
-        'adult_max_scan': adult_max_scan,
-        'batches': batch_detail
+        'error': error,
     },context_instance=RequestContext(request))
-
-
-
-
-
-
-
-
-
-

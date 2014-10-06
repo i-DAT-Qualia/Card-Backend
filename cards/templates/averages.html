@@ -3,6 +3,12 @@
     <title>iOrchestra Averages</title>
 </head>
 <body>
+   {%if error%} 
+
+   <p>{{error}}</p>
+
+   {%else%}
+
     <h1>iOrchestra Averages</h1>
 
     <h2>Average Numbers of Scans</h2>
@@ -44,10 +50,10 @@
 
 
         {% endfor %}
-
-
-
     </table>
+
+    {%endif%}
+
 
 
     
