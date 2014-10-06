@@ -19,6 +19,36 @@
         <li>Adult: {{ adult_max_scan }}</li>
     </ul>
 
+    <h2>Breakdown by batches</h2>
+
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Overall Average</th>
+            <th>Child Average</th>
+            <th>Adult Average</th>
+            <th>Child Total</th>
+            <th>Adult Total</th>
+        </tr>
+
+        {% for batch in batches %}
+
+        <tr>
+            <td>{{batch.name}}</td>
+            <th>{{batch.overall_average}}</th>
+            <th>{{batch.child_average}}</th>
+            <th>{{batch.adult_average}}</th>
+            <th>{{batch.child_total}}</th>
+            <th>{{batch.adult_total}}</th>
+        </tr>
+
+
+        {% endfor %}
+
+
+
+    </table>
+
 
     
 </body>
