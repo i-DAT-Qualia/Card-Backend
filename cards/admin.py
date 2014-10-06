@@ -5,6 +5,7 @@ from cards.actions import export_as_xls
 
 class ScanAdmin(admin.ModelAdmin):
     list_filter = ['readerLocation', 'added']
+    search_fields = ['card__code']
 
 # Register your models here.
 admin.site.register(Batch)
