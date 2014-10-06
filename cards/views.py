@@ -107,6 +107,10 @@ def averages(request):
             child_max_scan = 0
             adult_max_scan = 0
 
+            top_card = ''
+            top_child = ''
+            top_adult = ''
+
             for card in Card.objects.all():
                 scans = Scan.objects.filter(card=card).exclude(readerLocation__location__id=1).count()
                 if not scans == 0:
@@ -114,18 +118,21 @@ def averages(request):
 
                     if scans > overall_max_scan:
                         overall_max_scan = scans
+                        top_card = card.code
 
                     if card.is_child:
                         child_scan_numbers.append(scans)
 
                         if scans > child_max_scan:
                             child_max_scan = scans
+                            top_child = card.code
 
                     else:
                         adult_scan_numbers.append(scans)
 
                         if scans > adult_max_scan:
                             adult_max_scan = scans
+                            top_adult = card.code
 
             overall_average = numpy.mean(overall_scan_numbers)
             child_average = numpy.mean(child_scan_numbers)
@@ -171,6 +178,9 @@ def averages(request):
                 'overall_max_scan': overall_max_scan,
                 'child_max_scan': child_max_scan,
                 'adult_max_scan': adult_max_scan,
+                'top_card': top_card,
+                'top_child': top_child,
+                'top_adult': top_adult,
                 'batches': batch_detail
             },context_instance=RequestContext(request))
             
